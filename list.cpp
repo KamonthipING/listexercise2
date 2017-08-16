@@ -37,6 +37,7 @@ char List::popHead()
 	else
 	{
 		head = head->next;
+		head->prev = 0;
 	}
 	delete tmp;
 	return el;
