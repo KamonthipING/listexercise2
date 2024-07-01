@@ -2,35 +2,48 @@
 #include "list.h"
 using namespace std;
 
-List::~List() {
-	for(Node *p; !isEmpty(); ) {
-		p=head->next;
+template<class T>
+List<T>::~List() {
+	for (Node<T>* p; !isEmpty(); ) {
+		p = head->next;
 		delete head;
 		head = p;
 	}
 }
-
-void List::pushToHead(char el)
+template<class T>
+void List<T>::pushToHead(T el)
 {
-	head = new Node(el, head, 0);
-	if(tail==0)
+	head = new Node<T>(el, head, 0);
+	if (tail == 0)
 	{
 		tail = head;
 	}
 	else
-	{	
+	{
 		head->next->prev = head;
 	}
 }
-void List::pushToTail(char el)
+
+template<class T>
+void List<T>::pushToTail(T el)
 {
-	//TO DO!
+	Node<T>* p = new Node<T>(el);
+	if (isEmpty()) {
+		head = tail = p;
+	}
+	else {
+		tail->next = p;
+		p->prev = tail;
+		tail = p;
+	}
 }
-char List::popHead()
+
+template<class T>
+T List<T>::popHead()
 {
-	char el = head->data;
-	Node *tmp = head;
-	if(head == tail)
+	T el = head->data;
+	Node<T>* tmp = head;
+	if (head == tail)
 	{
 		head = tail = 0;
 	}
@@ -42,30 +55,62 @@ char List::popHead()
 	delete tmp;
 	return el;
 }
-char List::popTail()
+
+template<class T>
+T List<T>::popTail()
 {
-	// TO DO!
-	return NULL;
+	T el = tail->data;
+	Node<T>* p = tail;
+	if (isEmpty())
+	{
+		head = tail = 0;
+	}
+	else
+	{
+		tail = p->prev;
+		tail->next = 0;
+	}
+	delete p;
+	return el;
 }
-bool List::search(char el)
+
+template<class T>
+bool List<T>::search(T el)
 {
-	// TO DO! (Function to return True or False depending if a character is in the list.
-	return NULL;
+	if (isEmpty())
+	{
+		head = tail = 0;
+	}
+	else
+	{
+		Node<T>* p = head;
+		while (p->data != el)
+		{
+			if (p->next == 0)
+			{
+				return false;
+			}
+			p = p->next;
+		}
+	}
+	return true;
 }
-void List::print()
+
+template<class T>
+void List<T>::print()
 {
-	if(head  == tail)
+	if (head == tail)
 	{
 		cout << head->data;
 	}
 	else
 	{
-		Node *tmp = head;
-		while(tmp!=tail)
+		Node<T>* tmp = head;
+		while (tmp != tail)
 		{
-			cout << tmp->data;
+			cout << tmp->data << " ";
 			tmp = tmp->next;
 		}
-		cout << tmp->data;
+		cout << tmp->data << " ";
 	}
 }
